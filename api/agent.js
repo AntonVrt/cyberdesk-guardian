@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
   if (!process.env.GEMINI_API_KEY) return res.status(503).json({ error: "Agent is not configured" });
   const prompt = "You are FocusGuard, a concise AI study-focus coach. Help a student build focused, sustainable desk habits. Use the session state to decide a useful action. Reward a matching challenge more than a different valid scan. Rotate only PHONE, DOCUMENT, WATER_BOTTLE challenges. Keep feedback and tip under 18 words. Session state: " + JSON.stringify(input);
   try {
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent", { method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseJsonSchema: schema } }) });
+    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", { method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseJsonSchema: schema } }) });
     if (!response.ok) {
       const detail = await response.text();
       console.error("Gemini API error", response.status, detail.slice(0, 700));
