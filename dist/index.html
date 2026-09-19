@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CyberDesk Guardian is an AI assistant for safer study habits." />
+    <title>CyberDesk Guardian</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="demo.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand"><span class="shield" aria-hidden="true">◈</span><span>CyberDesk <b>Guardian</b></span></div>
+        <div class="privacy"><span class="dot"></span> Camera stays on this device</div>
+      </header>
+
+      <section class="intro">
+        <p class="eyebrow">AI SECURITY HABITS ASSISTANT</p>
+        <h1>Keep your study space focused and secure.</h1>
+        <p>CyberDesk analyzes desk objects and chooses the most useful next security habit.</p>
+      </section>
+
+      <section class="dashboard" aria-label="CyberDesk workspace">
+        <article class="camera-card">
+          <div class="card-heading">
+            <div><p class="label">LIVE INPUT</p><h2>Desk camera</h2></div>
+            <span class="status" id="cameraStatus">Demo mode</span>
+          </div>
+          <div class="camera-stage">
+            <video id="webcam" autoplay muted playsinline></video>
+            <div class="empty-camera" id="cameraEmpty">
+              <span aria-hidden="true">⌁</span>
+              <p>Connect a model, then enable the camera.</p>
+            </div>
+          </div>
+          <div class="camera-actions">
+            <button class="primary" id="cameraBtn" type="button">Enable camera</button>
+            <button class="secondary" id="demoBtn" type="button">Run demo detection</button>
+          </div>
+        </article>
+
+        <aside class="agent-card">
+          <div class="card-heading">
+            <div><p class="label">AGENT STATUS</p><h2>Security coach</h2></div>
+            <span class="agent-live"><span class="dot"></span> Ready</span>
+          </div>
+          <div class="goal"><span>Goal</span><strong>Build safer, more focused study habits.</strong></div>
+          <div class="agent-message" id="agentMessage" aria-live="polite">
+            <span class="message-icon" aria-hidden="true">✦</span>
+            <div><p class="message-type" id="decisionType">WAITING FOR INPUT</p><h3 id="decisionTitle">Your desk is ready.</h3><p id="decisionText">Connect a model or run a demo to get a security recommendation.</p></div>
+          </div>
+          <div class="agent-state">
+            <div><span>Score</span><b id="scoreState">0</b></div>
+            <div><span>Challenge</span><b id="challengeState">PHONE</b></div>
+            <div><span>Successful scans</span><b id="scanState">0</b></div>
+          </div>
+          <button class="focus-button" id="focusBtn" type="button">Start 20-minute focus session</button>
+        </aside>
+
+        <article class="prediction-card">
+          <div class="card-heading">
+            <div><p class="label">TEACHABLE MACHINE</p><h2>Latest prediction</h2></div>
+            <span class="model-state" id="modelState">Not connected</span>
+          </div>
+          <div class="prediction-main">
+            <div class="prediction-icon" id="predictionIcon">?</div>
+            <div><p id="predictionName">No prediction yet</p><div class="confidence-row"><span>Confidence</span><b id="confidenceText">--</b></div><div class="meter"><i id="confidenceMeter"></i></div></div>
+          </div>
+          <p class="hint">Suggested classes: PHONE, DOCUMENT, WATER_BOTTLE, NO_OBJECT.</p>
+          <details class="model-details">
+            <summary>Connect your Teachable Machine model</summary>
+            <label for="modelUrl">Model URL</label>
+            <div class="url-row"><input id="modelUrl" type="url" placeholder="https://teachablemachine.withgoogle.com/models/..." /><button id="connectBtn" type="button">Connect</button></div>
+            <p>Paste the published Image Model URL after training. The model is loaded locally in this browser.</p>
+          </details>
+        </article>
+
+        <article class="history-card">
+          <div class="card-heading"><div><p class="label">DECISION LOG</p><h2>Agent memory</h2></div><button id="clearLog" type="button" class="text-button">Clear</button></div>
+          <ol id="history"><li><time>NOW</time><span>Agent initialized and waiting for a desk signal.</span></li></ol>
+        </article>
+      </section>
+      <p class="footer-note">This demo does not send camera frames to a server. Never point the camera at passwords, IDs, or sensitive documents.</p>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+
