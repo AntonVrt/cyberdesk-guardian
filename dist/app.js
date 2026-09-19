@@ -11,8 +11,8 @@ async function askAgent(name, confidence) {
   renderDecision("AGENT THINKING", "Checking your session…", "The Agent is choosing the next focus habit.", "◌");
   const payload = { detectedClass: name, confidence, currentScore: state.score, streak: state.streak, totalScans: state.totalScans, phoneCount: state.counts.PHONE, documentCount: state.counts.DOCUMENT, waterBottleCount: state.counts.WATER_BOTTLE, currentChallenge: state.currentChallenge, previousAgentMessage: state.previousAgentMessage };
   let decision;
-  try { const response = await fetch("/api/agent", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); if (!response.ok) throw new Error(); decision = await response.json(); }
-  catch { decision = fallbackDecision(name); addLog("Agent server is not configured yet; demo decision used."); }
+  try { const response = await fetch("/api/agent", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); const result = await response.json(); if (!response.ok) throw new Error(result.upstreamStatus ? "Gemini returned status " + result.upstreamStatus + "; demo decision used." : "Agent server is not configured yet; demo decision used."); decision = result; }
+  catch (error) { decision = fallbackDecision(name); addLog(error instanceof Error ? error.message : "Agent server is not configured yet; demo decision used."); }
   if (decision.action === "ACCEPT_SCAN" && decision.accepted) { state.score += decision.scoreDelta; state.streak++; state.totalScans++; state.counts[name]++; } else state.streak = 0;
   state.currentChallenge = decision.nextChallenge; state.previousAgentMessage = decision.feedback; renderState();
   renderDecision(decision.action === "ACCEPT_SCAN" ? "AGENT DECISION" : "TRY AGAIN", decision.feedback, "Tip: " + decision.tip, decision.action === "ACCEPT_SCAN" ? "✓" : "↻");
