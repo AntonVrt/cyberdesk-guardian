@@ -1,10 +1,10 @@
-# CyberDesk Guardian
+# FocusGuard
 
-CyberDesk Guardian is a mobile-friendly AI security-habits assistant for a study desk. It detects selected desk objects with a Google Teachable Machine Image Model and chooses an action based on the detection and the current session state.
+FocusGuard is a mobile-friendly AI study-focus assistant for a study desk. It detects selected desk objects with a Google Teachable Machine Image Model and chooses an action based on the detection and the current session state.
 
 ## Project idea
 
-The app helps a student build safer and more focused habits. For example, a detected phone can start a focus session, while a document triggers a privacy reminder before sharing.
+The app helps a student build stronger and more focused habits. For example, a detected phone can start a focus session, while a water bottle can encourage a short healthy break.
 
 ## Teachable Machine model
 
@@ -18,7 +18,7 @@ After publishing the model in Teachable Machine, paste its model URL into the ap
 
 ### Goal
 
-Help the user keep a focused and safer study environment.
+Help the user keep a focused, sustainable study environment.
 
 ### Input
 
@@ -35,9 +35,9 @@ The predicted class and confidence from Teachable Machine.
 | Detection | Agent decision | Application action |
 | --- | --- | --- |
 | PHONE | Protect focus | Starts focus mode and displays a phone-away recommendation |
-| DOCUMENT | Check privacy | Displays a reminder about sensitive information |
+| DOCUMENT | Encourage organization | Displays a reminder to organize study materials |
 | WATER_BOTTLE | Suggest a healthy break | Displays a short hydration recommendation |
-| NO_OBJECT | Protect unattended device | Displays a device-lock reminder |
+| NO_OBJECT | Wait for an object | Displays a prompt to show a trained object |
 
 Repeated predictions within a few seconds are ignored so that the Agent does not repeat the same alert.
 
