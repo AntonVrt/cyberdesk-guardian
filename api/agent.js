@@ -1,6 +1,7 @@
 const ALLOWED_CLASSES = ["PHONE", "DOCUMENT", "WATER_BOTTLE"];
 const schema = { type: "object", properties: { accepted: { type: "boolean" }, feedback: { type: "string" }, scoreDelta: { type: "integer" }, nextChallenge: { type: "string", enum: ALLOWED_CLASSES }, action: { type: "string", enum: ["ACCEPT_SCAN", "RESCAN"] }, tip: { type: "string" } }, required: ["accepted", "feedback", "scoreDelta", "nextChallenge", "action", "tip"] };
 function validDecision(v) { return v && typeof v.accepted === "boolean" && typeof v.feedback === "string" && Number.isInteger(v.scoreDelta) && ALLOWED_CLASSES.includes(v.nextChallenge) && ["ACCEPT_SCAN", "RESCAN"].includes(v.action) && typeof v.tip === "string"; }
+const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 module.exports = async (req, res) => {
   res.setHeader("Content-Type", "application/json");
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -9,7 +10,12 @@ module.exports = async (req, res) => {
   if (!process.env.GEMINI_API_KEY) return res.status(503).json({ error: "Agent is not configured" });
   const prompt = "You are FocusGuard, a concise AI study-focus coach. Help a student build focused, sustainable desk habits. Use the session state to decide a useful action. Reward a matching challenge more than a different valid scan. Rotate only PHONE, DOCUMENT, WATER_BOTTLE challenges. Keep feedback and tip under 18 words. Session state: " + JSON.stringify(input);
   try {
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", { method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseJsonSchema: schema } }) });
+    const requestBody = JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseJsonSchema: schema } });
+    let response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", { method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY }, body: requestBody });
+    if (response.status === 503) {
+      await wait(800);
+      response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", { method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY }, body: requestBody });
+    }
     if (!response.ok) {
       const detail = await response.text();
       console.error("Gemini API error", response.status, detail.slice(0, 700));
