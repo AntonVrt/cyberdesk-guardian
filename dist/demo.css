@@ -1,0 +1,5 @@
+.demo-scene{background:radial-gradient(circle at 50% 45%,#183e51,transparent 38%),#081722}
+.demo-object{font-size:5rem;line-height:1;filter:drop-shadow(0 0 22px rgba(73,214,228,.4))}
+.demo-label{margin:.8rem 0 .2rem;color:#49d6e4;font-size:.75rem;font-weight:800;letter-spacing:.15em}
+.demo-subtitle{margin:0;font-size:.82rem}
+
